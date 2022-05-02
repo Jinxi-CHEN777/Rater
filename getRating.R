@@ -1,8 +1,12 @@
 getRating=function(temp,raw){
   otemp=temp
     name=raw[temp,1] #get the deidentified id for this user
+    set=raw[temp,2]
     for(j in (temp+1):(nrow(raw)+1)){
-      if(identical(raw[j,1],name)){}
+      if(identical(raw[j,1],name)){ #compare the DeIdentifiedUserId
+        if(identical(raw[j,2],set)){} #compare the TestSet
+        else{temp=j}
+      }
       else{
         temp=j #get the first row index for next user
         break
@@ -38,4 +42,22 @@ getRating=function(temp,raw){
     }
     
   return(list(temp=temp,tempraw=tempraw2))
+}
+
+getAllRating=function(temp,raw){
+  otemp=temp
+  name=raw[temp,1] #get the deidentified id for this user
+  set=raw[temp,2]
+  for(j in (temp+1):(nrow(raw)+1)){
+    if(identical(raw[j,1],name)){ #compare the DeIdentifiedUserId
+      if(identical(raw[j,2],set)){} #compare the TestSet
+      else{temp=j}
+    }
+    else{
+      temp=j #get the first row index for next user
+      break
+    }
+  }
+  tempraw=raw[otemp:(temp-1),c(2,5,9,1)]
+  return(list(temp=temp,tempraw=tempraw))
 }
